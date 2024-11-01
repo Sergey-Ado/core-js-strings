@@ -420,8 +420,8 @@ function extractNameFromTemplate(value) {
  *   unbracketTag('<span>') => 'span'
  *   unbracketTag('<a>') => 'a'
  */
-function unbracketTag(/* str */) {
-  throw new Error('Not implemented');
+function unbracketTag(str) {
+  return str.match(/<(\w+)>/)[1];
 }
 
 /**
@@ -439,8 +439,8 @@ function unbracketTag(/* str */) {
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(/* str */) {
-  throw new Error('Not implemented');
+function extractEmails(str) {
+  return str.split(';');
 }
 
 /**
@@ -459,8 +459,17 @@ function extractEmails(/* str */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  return str
+    .split('')
+    .map((ch) => {
+      if (/[a-z]/.test(ch))
+        return String.fromCharCode(((ch.charCodeAt(0) - 84) % 26) + 97);
+      if (/[A-Z]/.test(ch))
+        return String.fromCharCode(((ch.charCodeAt(0) - 52) % 26) + 65);
+      return ch;
+    })
+    .join('');
 }
 
 /**
@@ -487,8 +496,26 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const suits = ['♣', '♦', '♥', '♠'];
+  const ranks = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
+  const indexSuit = suits.findIndex((suit) => suit === value.slice(-1));
+  const indexRank = ranks.findIndex((rank) => rank === value.slice(0, -1));
+  return indexRank + 13 * indexSuit;
 }
 
 module.exports = {
